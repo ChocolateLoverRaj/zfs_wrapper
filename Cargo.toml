@@ -1,0 +1,13 @@
+[package]
+name = "zfs_wrapper"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+serde = { version = "1.0.228", features = ["derive"], optional = true }
+serde_json = "1.0.145"
+tokio = { version = "1.48.0", features = ["process"] }
+
+[features]
+serde = ["dep:serde"]
+default = ["serde"]
