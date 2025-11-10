@@ -1,13 +1,13 @@
-use std::fmt::Display;
+use std::{borrow::Cow, fmt::Display};
 
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[derive(Debug, Clone)]
-pub struct ZfsDataset {
-    pub zpool: String,
-    pub dataset: String,
+pub struct ZfsDataset<'a> {
+    pub zpool: Cow<'a, str>,
+    pub dataset: Cow<'a, str>,
 }
 
-impl Display for ZfsDataset {
+impl Display for ZfsDataset<'_> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let Self { zpool, dataset } = self;
         write!(f, "{zpool}/{dataset}")

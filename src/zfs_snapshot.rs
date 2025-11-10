@@ -1,20 +1,20 @@
-use std::fmt::Display;
+use std::{borrow::Cow, fmt::Display};
 
-#[derive(Debug, Clone, Copy)]
+use crate::ZfsDataset;
+
+#[derive(Debug, Clone)]
 pub struct ZfsSnapshot<'a> {
-    pub zpool: &'a str,
-    pub dataset: &'a str,
-    pub snapshot_name: &'a str,
+    pub dataset: ZfsDataset<'a>,
+    pub snapshot_name: Cow<'a, str>,
 }
 
 impl Display for ZfsSnapshot<'_> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let Self {
-            zpool,
             dataset,
             snapshot_name,
         } = self;
-        write!(f, "{zpool}/{dataset}@{snapshot_name}")
+        write!(f, "{dataset}@{snapshot_name}")
     }
 }
 
@@ -26,9 +26,11 @@ mod test {
     fn display() {
         assert_eq!(
             ZfsSnapshot {
-                zpool: "my-zpool",
-                dataset: "my-dataset",
-                snapshot_name: "snap0"
+                dataset: ZfsDataset {
+                    zpool: "my-zpool".into(),
+                    dataset: "my-snapshot".into()
+                },
+                snapshot_name: "snap0".into()
             }
             .to_string(),
             "my-zpool/my-dataset@snap0"

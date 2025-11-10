@@ -21,7 +21,7 @@ pub enum ZfsEnsureSnapshotOutput {
 pub async fn zfs_ensure_snapshot(
     zfs_snapshot: ZfsSnapshot<'_>,
 ) -> Result<ZfsEnsureSnapshotOutput, ZfsEnsureSnapshotError> {
-    match zfs_take_snapshot(zfs_snapshot).await {
+    match zfs_take_snapshot(zfs_snapshot.clone()).await {
         Ok(()) => Ok(ZfsEnsureSnapshotOutput::TookSnapshot),
         Err(e) => {
             if zfs_snapshot_exists(zfs_snapshot)
